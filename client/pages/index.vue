@@ -1,0 +1,107 @@
+<template>
+<div class="home" ref="home" :style="{ 'background-image': backgroundImage ? `url(${backgroundImage})` : false }">
+  <div class="background-placeholder" :style="{'opacity': backgroundImage ? 0 : 1}"></div>
+  <div class="content">
+    <div class="login">
+      <login-form></login-form>
+    </div>
+  </div>
+</div>
+</template>
+
+<style lang="scss">
+@import '@/assets/styles/_variables.scss';
+
+.home {
+  position: relative;
+  min-height: calc(100vh - #{$navbar-height} - 2*#{$navbar-border});
+  background: #787958;
+  background-size: cover;
+  background-position-x: 18%;
+  background-position-y: 72%;
+
+  .background-placeholder {
+    background: #787958;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transition: opacity 1s;
+    z-index: 10;
+  }
+
+  .content {
+    position: relative;
+    z-index: 20;
+    overflow: hidden;
+
+    .description {
+      color: white;
+      font-size: 5vw;
+      text-shadow: 0 0 1vw #787958;
+    }
+
+    .login {
+      margin: 10% auto 0;
+      width: 100%;
+      max-width: 576px;
+      padding: 1em;
+      box-sizing: border-box;
+      text-align: right;
+
+      .alert-error {
+        border: 2px solid red;
+        color: white;
+        background: rgba(255, 0, 0, 0.5);
+        text-align: left;
+        padding: 0.5em;
+        margin: 0 0 1em;
+        font-size: 1.5em;
+        border-radius: 5px;
+      }
+
+      
+    }
+
+    @media (min-width: 576px) {
+      .login {
+        // width: calc(576px);
+      }
+    }
+    @media (min-width: 832px) {
+      .login {
+        margin: 10% 15% 0 auto;
+      }
+    }
+  }
+}
+</style>
+
+<script>
+import LoginForm from '@/components/LoginForm';
+
+export default {
+  head: {
+    title: 'Home'
+  },
+  meta: {
+    public: true
+  },
+  data() {
+    return {
+      backgroundImage: undefined
+    };
+  },
+  mounted() {
+    // charge l'image de fond
+    let tempImg = new Image();
+    tempImg.src = '/images/home.jpg';
+    tempImg.onload = () => {
+      console.log('img loaded', tempImg);
+      this.backgroundImage = tempImg.src;
+    };
+  },
+  components: { LoginForm }
+};
+</script>
