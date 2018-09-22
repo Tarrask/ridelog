@@ -16,18 +16,18 @@
     </ul>
   </section>
   <section class="form-page">
-    <form @submit.prevent="updateType">
-      <input type="hidden" name="id" id="id" v-model="type.id">
-      <input type="text" list="groupList" name="group" id="group" v-model="type.group" placeholder="Groupe" @input="resetButton">
-      <input type="text" name="name" id="name" v-model="type.name" placeholder="Nom" @input="resetButton">
+    <form @submit.prevent="saveType">
+      <input type="hidden" name="id" id="id" v-model="id">
+      <input type="text" list="groupList" name="group" id="group" v-model="group" placeholder="Groupe" @input="resetButton">
+      <input type="text" name="name" id="name" v-model="name" placeholder="Nom" @input="resetButton">
       <datalist id="groupList">
         <option v-for="(group, key) of typesByGroup" :value="key" :key="key"></option>
       </datalist>
       <state-button
         :state="state"
-        :label="type.id ? 'Mettre à jour' : 'Créer'"
-        :successLabel="type.id ? 'Mise à jour effectuée' : 'Type créé'"
-        :errorLabel="type.id ? 'Echec de la mise à jour' : 'Echec de la création'"></state-button>
+        :label="id ? 'Mettre à jour' : 'Créer'"
+        :successLabel="id ? 'Mise à jour effectuée' : 'Type créé'"
+        :errorLabel="id ? 'Echec de la mise à jour' : 'Echec de la création'"></state-button>
     </form>
   </section>
 </div>
@@ -35,68 +35,53 @@
 
 <script>
 import { groupBy, omit } from 'lodash';
+import { mapState, mapGetters } from 'vuex';
+import { mapFields } from 'vuex-map-fields';
 
 import StateButton, * as State from '@/components/StateButton';
-
-function initialType() {
-  return {
-    id: null,
-    group: '',
-    name: ''
-  };
-}
 
 export default {
   data() {
     return {
-      type: initialType(),
       state: State.READY
     };
   },
   computed: {
-    types() {
-      return this.$store.state.componentTypes;
-    },
-    typesByGroup() {
-      let groups = groupBy(this.types, t => t.group);
-      for (let key in groups) {
-        groups[key].sort((a, b) => String.localeCompare(a.name, b.name));
-      }
-      return groups;
-    },
-    sortedGroups() {
-      let groups = Object.keys(this.typesByGroup).sort();
-      return groups;
-    }
+    ...mapFields([
+      'editing.componentType.id',
+      'editing.componentType.name',
+      'editing.componentType.group'
+    ]),
+    ...mapState([
+      'types'
+    ]),
+    ...mapGetters([
+      'typesByGroup',
+      'sortedGroups'
+    ])
   },
   methods: {
     editType(type) {
       this.resetButton();
-      this.type = Object.assign({}, type);
+      this.$store.commit('EDIT_COMPONENT_TYPE', type);
     },
     newType() {
       this.resetButton();
-      this.resetType();
+      this.$store.commit('EDIT_COMPONENT_TYPE');
     },
-    async updateType(type) {
+    async saveType() {
       try {
         this.state = State.PENDING;
-        let type = this.type.id
-          ? await this.$axios.$patch(`/api/componentType/${this.type.id}`, this.type)
-          : await this.$axios.$post('/api/componentType', omit(this.type, 'id'));
-        this.$store.commit(this.type.id ? 'UPDATE_COMPONENT_TYPE' : 'ADD_COMPONENT_TYPE', type);
+        await this.$store.dispatch('saveComponentType');
         this.state = State.SUCCESS;
       }
       catch(err) {
+        console.log(err);
         this.state = State.ERROR;
       }
     },
     async deleteType(type) {
-      await this.$axios.$delete(`/api/componentType/${type.id}`);
-      this.$store.commit('DELETE_COMPONENT_TYPE', type);
-    },
-    resetType() {
-      this.type = initialType();
+      this.$store.dispatch('deleteComponentType', type);
     },
     resetButton() {
       this.state = State.READY;

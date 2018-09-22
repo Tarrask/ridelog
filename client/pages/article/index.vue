@@ -12,26 +12,25 @@
       </ul>
     </section>
     <section class="form-page">
-      <form @submit.prevent="updateArticle">
-        <input type="hidden" name="id" id="id" v-model="article._id">
-        <input type="text" name="name" id="name" placeholder="Nom" v-model="article.name" @input="resetButton">
+      <form @submit.prevent="saveArticle">
+        <input type="hidden" name="id" id="id" v-model="id">
         <input type="text" name="name" id="name" placeholder="Nom" v-model="name" @input="resetButton">
-        <input type="text" name="reference" id="reference" placeholder="Référence" v-model="article.reference" @input="resetButton">
-        <select name="type" id="type" v-model="article.type" @change="resetButton" :class="{ placeholder: !article.type }">
+        <input type="text" name="reference" id="reference" placeholder="Référence" v-model="reference" @input="resetButton">
+        <select name="type" id="type" v-model="type" @change="resetButton">
           <option :value="null">&mdash; Faites un choix &mdash;</option>
           <optgroup v-for="key in sortedGroups" :label="key" :key="key">
             <option v-for="type in typesByGroup[key]" :value="type.id" :key="type.is">{{ type.name }}</option>
           </optgroup>
         </select>
-        <select name="brand" id="brand" v-model="article.brand" @change="resetButton">
+        <select name="brand" id="brand" v-model="brand" @change="resetButton">
           <option :value="null">&mdash; Faites un choix &mdash;</option>
           <option v-for="brand in brands" :value="brand.id" :key="brand.id">{{ brand.name }}</option>
         </select>
         <state-button
           :state="state"
-          :label="article.id ? 'Mettre à jour' : 'Créer'"
-          :successLabel="article.id ? 'Mise à jour effectuée' : 'Article créé'"
-          :errorLabel="article.id ? 'Echec de la mise à jour' : 'Echec de la création'"></state-button>
+          :label="id ? 'Mettre à jour' : 'Créer'"
+          :successLabel="id ? 'Mise à jour effectuée' : 'Article créé'"
+          :errorLabel="id ? 'Echec de la mise à jour' : 'Echec de la création'"></state-button>
       </form>
     </section>
   </div>
@@ -39,78 +38,48 @@
 
 <script>
 import { groupBy, omit } from 'lodash';
+import { mapState, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 
 import StateButton, * as State from '@/components/StateButton';
 
-function initialArticle() {
-  return {
-    id: null,
-    name: '',
-    reference: '',
-    type: null,
-    brand: null
-  };
-}
-
-function bindProps(base, props) {
-  return props.reduce((acc, prop) => {
-    acc[prop] = {
-      get() { return this.$store.getters.editing([base, prop]); },
-      set(value) { return this.$store.commit('UPDATE_EDITING', { prop: [base, prop], value }); }
-    };
-    return acc;
-  }, {});
-}
-
 export default {
   data() {
     return {
-      article: initialArticle(),
       state: State.READY
     };
   },
   computed: {
-    //...bindProps('article', ['name', 'reference']),
     ...mapFields([
-      'editing.article.name'
+      'editing.article.id',
+      'editing.article.name',
+      'editing.article.reference',
+      'editing.article.type',
+      'editing.article.brand'
     ]),
-    articles() {
-      return this.$store.state.articles;
-    },
-    types() {
-      return this.$store.state.componentTypes;
-    },
-    typesByGroup() {
-      let groups = groupBy(this.types, t => t.group);
-      for (let key in groups) {
-        groups[key].sort((a, b) => a.name.localeCompare(b.name));
-      }
-      return groups;
-    },
-    sortedGroups() {
-      return Object.keys(this.typesByGroup).sort();
-    },
-    brands() {
-      return this.$store.state.brands;
-    }
+    ...mapState([
+      'articles',
+      'componentTypes',
+      'brands'
+    ]),
+    ...mapGetters([
+      'typesByGroup',
+      'sortedGroups'
+    ])
   },
   methods: {
     editArticle(article) {
       this.resetButton();
-      this.article = Object.assign({}, article);
+      this.$store.commit('EDIT_ARTICLE', article);
     },
     newArticle() {
       this.resetButton();
-      this.resetArticle();
+      this.$store.commit('EDIT_ARTICLE');
     },
-    async updateArticle() {
+    async saveArticle() {
       try {
         this.state = State.PENDING;
-        let article = this.article.id
-          ? await this.$axios.$patch(`/api/article/${this.article.id}`, this.article)
-          : await this.$axios.$post('/api/article', omit(this.article, 'id'));
-        this.$store.commit(this.article.id ? 'UPDATE_ARTICLE' : 'ADD_ARTICLE', article);
+        await this.$store.dispatch('saveArticle');
         this.state = State.SUCCESS;
       }
       catch(err) {
@@ -119,11 +88,7 @@ export default {
       }
     },
     async deleteArticle(article) {
-      await this.$axios.$delete(`/api/article/${article.id}`);
-      this.$store.commit('DELETE_ARTICLE', article);
-    },
-    resetArticle() {
-      this.article = initialArticle();
+      this.$store.dispatch('deleteArticle', article);
     },
     resetButton() {
       this.state = State.READY;

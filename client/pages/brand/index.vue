@@ -12,21 +12,24 @@
       </ul>
     </section>
     <section class="form-page">
-      <form @submit.prevent="updateBrand">
-        <input type="hidden" name="id" id="id" v-model="brand._id">
-        <input type="text" name="name" id="name" placeholder="Nom" v-model="brand.name" @input="resetButton">
-        <input type="text" name="website" id="website" placeholder="Website" v-model="brand.website" @input="resetButton">
+      <form @submit.prevent="saveBrand">
+        <input type="hidden" name="id" id="id" v-model="id">
+        <input type="text" name="name" id="name" placeholder="Nom" v-model="name" @input="resetButton">
+        <input type="text" name="website" id="website" placeholder="Website" v-model="website" @input="resetButton">
         <state-button
           :state="state"
-          :label="brand.id ? 'Mettre à jour' : 'Créer'"
-          :successLabel="brand.id ? 'Mise à jour effectuée' : 'Marque créée'"
-          :errorLabel="brand.id ? 'Echec de la mise à jour' : 'Echec de la création'"></state-button>
+          :label="id ? 'Mettre à jour' : 'Créer'"
+          :successLabel="id ? 'Mise à jour effectuée' : 'Marque créée'"
+          :errorLabel="id ? 'Echec de la mise à jour' : 'Echec de la création'"></state-button>
       </form>
     </section>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
+import { mapFields } from 'vuex-map-fields';
+
 import StateButton, * as State from '@/components/StateButton';
 
 function initialBrand() {
@@ -40,43 +43,41 @@ function initialBrand() {
 export default {
   data() {
     return {
-      brand: initialBrand(),
       state: State.READY
     };
   },
   computed: {
-    brands() {
-      return this.$store.state.brands;
-    }
+    ...mapFields([
+      'editing.brand.id',
+      'editing.brand.name',
+      'editing.brand.website'
+    ]),
+    ...mapState([
+      'brands'
+    ])
   },
   methods: {
     editBrand(brand) {
       this.resetButton();
-      this.brand = Object.assign({}, brand);
+      this.$store.commit('EDIT_BRAND', brand);
     },
     newBrand() {
       this.resetButton();
-      this.resetBrand();
+      this.$store.commit('EDIT_BRAND');
     },
-    async updateBrand() {
+    async saveBrand() {
       try {
         this.state = State.PENDING;
-        let brand = this.brand.id
-          ? await this.$axios.$patch(`/api/brand/${this.brand.id}`, this.brand)
-          : await this.$axios.$post('/api/brand', { name: this.brand.name, website: this.brand.website });
-        this.$store.commit(this.brand.id ? 'UPDATE_BRAND' : 'ADD_BRAND', brand);
+        await this.$store.dispatch('saveBrand');
         this.state = State.SUCCESS;
       }
       catch(err) {
+        console.log(err);
         this.state = State.ERROR;
       }
     },
     async deleteBrand(brand) {
-      await this.$axios.$delete(`/api/brand/${brand.id}`);
-      this.$store.commit('DELETE_BRAND', brand);
-    },
-    resetBrand() {
-      this.brand = initialBrand();
+      await this.$store.dispatch('deleteBrand', brand);
     },
     resetButton() {
       this.state = State.READY;

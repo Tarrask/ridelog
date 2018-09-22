@@ -1,17 +1,42 @@
-import { findIndex } from 'lodash';
+import { findIndex, omit, groupBy } from 'lodash';
 import objectPath from 'object-path';
 import Vue from 'vue';
 import { getField, updateField } from 'vuex-map-fields';
 
 const initializer = {
+  brand() {
+    return {
+      id: null,
+      name: '',
+      website: ''
+    };
+  },
+  componentType() {
+    return {
+      id: null,
+      group: '',
+      name: ''
+    };
+  },
   article() {
     return {
+      id: null,
       name: '',
-      reference: ''
+      reference: '',
+      type: null,
+      brand: null
     };
+  },
+  bike() {
+    return {};
   }
 };
 
+//  ████  █████   ███   █████  █████
+// █        █    █   █    █    █
+//  ███     █    █████    █    ████
+//     █    █    █   █    █    █
+// ████     █    █   █    █    █████
 export const state = () => {
   return {
     authUser: null,
@@ -21,17 +46,30 @@ export const state = () => {
     articles: [],
     editing: {
       ride: {},
-      brand: {},
-      componentType: {},
-      article: initializer.article()
+      brand: initializer.brand(),
+      componentType: initializer.componentType(),
+      article: initializer.article(),
+      bike: initializer.bike()
     }
   };
 };
 
+//  ████  █████  █████  █████  █████  ████    ████
+// █      █        █      █    █      █   █  █
+// █  ██  ███      █      █    ███    ████    ███
+// █   █  █        █      █    █      █  █       █
+//  ████  █████    █      █    █████  █   █  ████
 export const getters = {
   getField,
-  editing: (state) => (prop) => {
-    return objectPath.get(state.editing, prop);
+  typesByGroup(state) {
+    let groups = groupBy(state.componentTypes, t => t.group);
+    for (let key in groups) {
+      groups[key].sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return groups;
+  },
+  sortedGroups(state, getters) {
+    return Object.keys(getters.typesByGroup).sort();
   },
   ridesById(state) {
     return state.rides.reduce((acc, ride, index) => {
@@ -42,14 +80,15 @@ export const getters = {
   }
 };
 
+// █   █  █   █  █████   ███   █████  ███   ███   █   █   ████
+// ██ ██  █   █    █    █   █    █     █   █   █  ██  █  █
+// █ █ █  █   █    █    █████    █     █   █   █  █ █ █   ███
+// █   █  █   █    █    █   █    █     █   █   █  █  ██      █
+// █   █   ███     █    █   █    █    ███   ███   █   █  ████
 export const mutations = {
   updateField,
   SET_USER(state, user) {
     state.authUser = user;
-  },
-
-  UPDATE_EDITING(state, { prop, value }) {
-    objectPath.set(state.editing, prop, value);
   },
 
   SET_RIDE(state, newRide) {
@@ -86,6 +125,9 @@ export const mutations = {
     }
     state.brands.splice(index, 1);
   },
+  EDIT_BRAND(state, brand) {
+    state.editing.brand = brand ? Object.assign({}, brand) : initializer.brand();
+  },
 
   // ============================= Component types =============================
   SET_COMPONENT_TYPES(state, types) {
@@ -108,6 +150,9 @@ export const mutations = {
     }
     state.componentTypes.splice(index, 1);
   },
+  EDIT_COMPONENT_TYPE(state, type) {
+    state.editing.componentType = type ? Object.assign({}, type) : initializer.componentType();
+  },
 
   // ================================ Articles =================================
   SET_ARTICLES(state, articles) {
@@ -121,7 +166,7 @@ export const mutations = {
     if(index === -1) {
       throw new Error('articleNotFound');
     }
-    Vue.set(state.article, index, article);
+    Vue.set(state.articles, index, article);
   },
   DELETE_ARTICLE(state, article) {
     let index = findIndex(state.articles, t => t.id === article.id);
@@ -129,9 +174,17 @@ export const mutations = {
       throw new Error('articleNotFound');
     }
     state.articles.splice(index, 1);
+  },
+  EDIT_ARTICLE(state, article) {
+    state.editing.article = article ? Object.assign({}, article) : initializer.article();
   }
 };
 
+//  ███    ████  █████  ███   ███   █   █   ████
+// █   █  █        █     █   █   █  ██  █  █
+// █████  █        █     █   █   █  █ █ █   ███
+// █   █  █        █     █   █   █  █  ██      █
+// █   █   ████    █    ███   ███   █   █  ████
 export const actions = {
   async nuxtServerInit({ commit, dispatch }, { app }) {
     console.log('nuxtServerInit');
@@ -155,6 +208,61 @@ export const actions = {
     commit('SET_BRANDS', await this.$axios.$get('/api/brand'));
     commit('SET_COMPONENT_TYPES', await this.$axios.$get('/api/componentType'));
     commit('SET_ARTICLES', await this.$axios.$get('/api/article?populate=false'));
+  },
+
+  async saveBrand({ state, commit }) {
+    if(state.editing.brand.id) {
+      let saved = await this.$axios.$patch(`/api/brand/${state.editing.brand.id}`, state.editing.brand);
+      commit('UPDATE_BRAND', saved);
+      commit('EDIT_BRAND');
+    }
+    else {
+      let saved = await this.$axios.$post('/api/brand', omit(state.editing.brand, 'id'));
+      commit('ADD_BRAND', saved);
+      commit('EDIT_BRAND');
+    }
+  },
+  async deleteBrand({ commit }, brand) {
+    await this.$axios.$delete(`/api/brand/${brand.id}`);
+    commit('DELETE_BRAND', brand);
+  },
+
+  async saveComponentType({ state, commit }) {
+    if(state.editing.componentType.id) {
+      let saved = await this.$axios.$patch(`/api/componentType/${state.editing.componentType.id}`, state.editing.componentType);
+      commit('UPDATE_COMPONENT_TYPE', saved);
+      commit('EDIT_COMPONENT_TYPE');
+    }
+    else {
+      let saved = await this.$axios.$post('/api/componentType', omit(state.editing.componentType, 'id'));
+      commit('ADD_COMPONENT_TYPE', saved);
+      commit('EDIT_COMPONENT_TYPE');
+    }
+  },
+  async deleteComponentType({ commit }, type) {
+    await this.$axios.$delete(`/api/componentType/${type.id}`);
+    commit('DELETE_COMPONENT_TYPE', type);
+  },
+
+  async saveArticle({ state, commit }) {
+    if(state.editing.article.id) {
+      let saved = await this.$axios.$patch(`/api/article/${state.editing.article.id}`, state.editing.article);
+      saved.type = saved.type.id;
+      saved.brand = saved.brand.id;
+      commit('UPDATE_ARTICLE', saved);
+      commit('EDIT_ARTICLE');
+    }
+    else {
+      let saved = await this.$axios.$post('/api/article', omit(state.editing.article, 'id'));
+      saved.type = saved.type.id;
+      saved.brand = saved.brand.id;
+      commit('ADD_ARTICLE', saved);
+      commit('EDIT_ARTICLE');
+    }
+  },
+  async deleteArticle({ commit }, article) {
+    await this.$axios.$delete(`/api/article/${article.id}`);
+    commit('DELETE_ARTICLE', article);
   },
 
   async login({ commit, dispatch }, { username, password }) {
