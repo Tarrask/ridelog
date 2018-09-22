@@ -31,7 +31,7 @@ export default {
   props: {
     state: {
       type: String,
-      default: PENDING
+      default: READY
     },
     label: {
       type: String,

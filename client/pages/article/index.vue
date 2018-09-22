@@ -17,13 +17,13 @@
         <input type="text" name="name" id="name" placeholder="Nom" v-model="name" @input="resetButton">
         <input type="text" name="reference" id="reference" placeholder="Référence" v-model="reference" @input="resetButton">
         <select name="type" id="type" v-model="type" @change="resetButton">
-          <option :value="null">&mdash; Faites un choix &mdash;</option>
+          <option :value="undefined">&mdash; Faites un choix &mdash;</option>
           <optgroup v-for="key in sortedGroups" :label="key" :key="key">
             <option v-for="type in typesByGroup[key]" :value="type.id" :key="type.is">{{ type.name }}</option>
           </optgroup>
         </select>
         <select name="brand" id="brand" v-model="brand" @change="resetButton">
-          <option :value="null">&mdash; Faites un choix &mdash;</option>
+          <option :value="undefined">&mdash; Faites un choix &mdash;</option>
           <option v-for="brand in brands" :value="brand.id" :key="brand.id">{{ brand.name }}</option>
         </select>
         <state-button
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { groupBy, omit } from 'lodash';
 import { mapState, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 

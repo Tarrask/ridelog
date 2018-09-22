@@ -6,29 +6,37 @@ import { getField, updateField } from 'vuex-map-fields';
 const initializer = {
   brand() {
     return {
-      id: null,
+      id: undefined,
       name: '',
       website: ''
     };
   },
   componentType() {
     return {
-      id: null,
+      id: undefined,
       group: '',
       name: ''
     };
   },
   article() {
     return {
-      id: null,
+      id: undefined,
       name: '',
       reference: '',
-      type: null,
-      brand: null
+      type: undefined,
+      brand: undefined
     };
   },
   bike() {
-    return {};
+    return {
+      id: undefined,
+      brand: undefined,
+      name: '',
+      buyDate: undefined,
+      buyPrice: undefined,
+      sellDate: undefined,
+      sellPrice: undefined
+    };
   }
 };
 
@@ -44,6 +52,7 @@ export const state = () => {
     brands: [],
     componentTypes: [],
     articles: [],
+    bikes: [],
     editing: {
       ride: {},
       brand: initializer.brand(),
@@ -177,7 +186,33 @@ export const mutations = {
   },
   EDIT_ARTICLE(state, article) {
     state.editing.article = article ? Object.assign({}, article) : initializer.article();
-  }
+  },
+
+  // ================================ Bikes ====================================
+  SET_BIKES(state, bikes) {
+    state.bikes = bikes;
+  },
+  ADD_BIKE(state, bike) {
+    state.bikes.push(bike);
+  },
+  UPDATE_BIKE(state, bike) {
+    let index = findIndex(state.bikes, b => b.id === bike.id);
+    if(index === -1) {
+      throw new Error('bikeNotFound');
+    }
+    Vue.set(state.bikes, index, bike);
+  },
+  DELETE_BIKE(state, bike) {
+    let index = findIndex(state.bikes, b => b.id === bike.id);
+    if(index === -1) {
+      throw new Error('bikeNotFound');
+    }
+    state.bikes.splice(index, 1);
+  },
+  EDIT_BIKE(state, bike) {
+    state.editing.bike = bike ? Object.assign({}, bike) : initializer.bike();
+  },
+
 };
 
 //  ███    ████  █████  ███   ███   █   █   ████
@@ -208,6 +243,7 @@ export const actions = {
     commit('SET_BRANDS', await this.$axios.$get('/api/brand'));
     commit('SET_COMPONENT_TYPES', await this.$axios.$get('/api/componentType'));
     commit('SET_ARTICLES', await this.$axios.$get('/api/article?populate=false'));
+    commit('SET_BIKES', await this.$axios.$get('/api/bike?populate=false'));
   },
 
   async saveBrand({ state, commit }) {
@@ -263,6 +299,27 @@ export const actions = {
   async deleteArticle({ commit }, article) {
     await this.$axios.$delete(`/api/article/${article.id}`);
     commit('DELETE_ARTICLE', article);
+  },
+
+  async saveBike({ state, commit }) {
+    if(state.editing.bike.id) {
+      let saved = await this.$axios.$patch(`/api/bike/${state.editing.bike.id}?user=${state.authUser.id}`, omit(state.editing.bike, 'user'));
+      saved.user = saved.user.id;
+      saved.brand = saved.brand.id;
+      commit('UPDATE_BIKE', saved);
+      commit('EDIT_BIKE');
+    }
+    else {
+      let saved = await this.$axios.$post(`/api/bike?user=${state.authUser.id}`, omit(state.editing.bike, 'id'));
+      saved.user = saved.user.id;
+      saved.brand = saved.brand.id;
+      commit('ADD_BIKE', saved);
+      commit('EDIT_BIKE');
+    }
+  },
+  async deleteBike({ commit }, bike) {
+    await this.$axios.$delete(`/api/bike/${bike.id}`);
+    commit('DELETE_BIKE', bike);
   },
 
   async login({ commit, dispatch }, { username, password }) {

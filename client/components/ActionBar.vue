@@ -6,6 +6,7 @@
     <li><nuxt-link to="/brand">Marques</nuxt-link></li>
     <li><nuxt-link to="/type">Types de composant</nuxt-link></li>
     <li><nuxt-link to="/article">Articles</nuxt-link></li>
+    <li><nuxt-link to="/bike">Vélos</nuxt-link></li>
   </ul>
 </div>
 </template>
