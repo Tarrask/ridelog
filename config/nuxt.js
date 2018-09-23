@@ -1,4 +1,5 @@
 const nodeExternals = require('webpack-node-externals');
+const WebpackMonitor = require('webpack-monitor');
 
 module.exports.nuxt = {
   /*
@@ -51,6 +52,14 @@ module.exports.nuxt = {
         ];
       }
 
+      if(ctx.isClient && !ctx.isDev) {
+        config.plugins.push(
+          new WebpackMonitor({
+            capture: true,
+            launch: true
+          }));
+      }
+
       const vueLoader = config.module.rules.find(rule => rule.loader === `vue-loader`);
       vueLoader.options.preserveWhitespace = true;
     }
@@ -61,7 +70,8 @@ module.exports.nuxt = {
   },
   plugins: [ { src: '~plugins/socket.io.js', ssr: false }, '~plugins/font-awesome' ],
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/pwa'
   ],
   axios: {
     proxy: true

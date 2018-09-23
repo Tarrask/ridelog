@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import { groupBy, omit } from 'lodash';
+import groupBy from 'lodash/groupBy';
+import omit from 'lodash/omit';
 import { mapState, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 

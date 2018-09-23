@@ -141,3 +141,4 @@ lib-cov
 *.log
 *.out
 *.pid
+sw.*

@@ -18,7 +18,7 @@ module.exports = function defineNuxtHook(sails) {
      */
     initialize: async function (done) {
 
-      sails.log.info('Initializing nuxt (`hooks/nuxt`)');
+      sails.log('Initializing nuxt (`hooks/nuxt`)');
 
       // define API_PORT environment variable, used by axios module to access api
       process.env.API_PORT = sails.config.port;

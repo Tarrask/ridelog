@@ -1,4 +1,6 @@
-import { findIndex, omit, groupBy } from 'lodash';
+import findIndex from 'lodash/findIndex';
+import omit from 'lodash/omit';
+import groupBy from 'lodash/groupBy';
 import objectPath from 'object-path';
 import Vue from 'vue';
 import { getField, updateField } from 'vuex-map-fields';
