@@ -14,8 +14,8 @@ module.exports = async function(req, res) {
     req.file('gpxFile').upload({
       adapter: require('skipper-gridfs'),
       uri: 'mongodb://localhost:27017/ridelog.ride'
-    }, function(err, fileUploaded) {
-      if(err) return reject(err);
+    }, (err, fileUploaded) => {
+      if(err) { return reject(err); }
       resolve(fileUploaded);
     });
   });
@@ -37,5 +37,5 @@ module.exports = async function(req, res) {
   res.json(ride);
 
   console.log('starting gpx processing...');
-  let processed = await sails.helpers.gpxProcessor(ride.id);
+  await sails.helpers.gpxProcessor(ride.id);
 };

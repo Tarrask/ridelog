@@ -20,7 +20,7 @@ module.exports = async function(req, res) {
 
   const user = await User.findOne({ or: [{ username: username }, { email: username }] });
   sails.log('  User found:', user);
-  
+
   if(user && user.passwordHash && await bcrypt.compare(password, user.passwordHash)) {
     sails.log('  Password is valid. Authentication successful');
     req.session.userId = user.id;

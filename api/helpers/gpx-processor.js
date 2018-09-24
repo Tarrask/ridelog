@@ -1,5 +1,4 @@
 
-const fs = require('fs');
 const  mongodb  = require('mongodb');
 const XmlStream = require('xml-stream');
 const geolib = require('geolib');
@@ -36,8 +35,6 @@ module.exports = {
     const readStream = bucket.openDownloadStream(ride.gpxFile);
 
     var path = [];
-    var lastElevation = undefined;
-    var lastFilteredElevation;
     var dplus = 0;
     var dplusFiltered = 0;
     var dmoins = 0;
@@ -123,4 +120,3 @@ module.exports = {
     });
   }
 };
-

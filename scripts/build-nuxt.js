@@ -1,5 +1,5 @@
 
-const { Nuxt, Builder } = require('nuxt');
+const { Builder } = require('nuxt');
 
 module.exports = {
   friendlyName: 'Build',

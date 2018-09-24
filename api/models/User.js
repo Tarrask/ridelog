@@ -17,8 +17,8 @@ module.exports = {
     passwordHash: { type: 'string', required: true },
     role: { type: 'string', required: true, isIn: ['user', 'admin'] },
     rides: {
-        collection: 'ride',
-        via: 'user'
+      collection: 'ride',
+      via: 'user'
     }
 
 
@@ -34,4 +34,3 @@ module.exports = {
   },
 
 };
-

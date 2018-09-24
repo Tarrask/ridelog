@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
- const ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 
 /**
  * ride/create.js
@@ -11,12 +11,14 @@
  */
 module.exports = async function(req, res) {
   const id = req.params.id;
-  if(!id) return res.badRequest('id is missing');
+  if(!id) { return res.badRequest('id is missing'); }
 
   const currentRide = await Ride.findOne({ id });
-  if(!currentRide) return res.badRequest('Ride don\'t exits');
+  if(!currentRide) { return res.badRequest('Ride don\'t exits'); }
 
-  if(currentRide.user !== req.session.userId) return res.forbidden('You don\'t own this ride');
+  if(currentRide.user !== req.session.userId) {
+    return res.forbidden('You don\'t own this ride');
+  }
 
   const newRide = {
     title: req.body.title,

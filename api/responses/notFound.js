@@ -10,4 +10,4 @@ module.exports = async function() {
     let page = await sails.nuxt.renderRoute('/error', { req: this.req, res: this.res });
     return this.res.status(boom.statusCode).send(page.html);
   }
-}
+};

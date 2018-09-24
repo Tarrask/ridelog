@@ -2,10 +2,10 @@
 const Joi = require('joi');
 
 const inputsEmpty = {
-    headers: Joi.object(),
-    body: Joi.object().optional(),
-    query: Joi.object()
-  };
+  headers: Joi.object(),
+  body: Joi.object().optional(),
+  query: Joi.object()
+};
 
 function jsonExitsValidationDecorator(func, schema) {
   return function(body) {
@@ -22,7 +22,7 @@ function jsonExitsValidationDecorator(func, schema) {
 
     // when the response is valid, call the real json function with the sanitized value
     func.call(this, result.value);
-  }
+  };
 }
 
 module.exports = async function(req, res, next) {
@@ -33,7 +33,7 @@ module.exports = async function(req, res, next) {
   }
 
   // validating headers, body and query only
-  const inputsResult = Joi.validate({ 
+  const inputsResult = Joi.validate({
     headers: req.headers,
     body: req.body,
     query: req.query
@@ -53,4 +53,4 @@ module.exports = async function(req, res, next) {
 
   // finally call the rest of the middlewares
   next();
-}
+};

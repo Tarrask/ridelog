@@ -44,7 +44,7 @@ module.exports = function defineNuxtHook(sails) {
 
     routes: {
       after: {
-        '*': function(req, res, next) {
+        '*': function(req, res) {
           return nuxt.render(req, res);
         }
       }

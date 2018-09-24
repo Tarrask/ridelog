@@ -2,10 +2,10 @@
 const Joi = require('joi');
 
 module.exports.schemas = {
-  'empty': { 
+  'empty': {
     headers: Joi.object().required(),
     body: Joi.object().keys({}).optional(),
-    query: Joi.object().keys({}).required() 
+    query: Joi.object().keys({}).required()
   },
 
   'loginForm': {
