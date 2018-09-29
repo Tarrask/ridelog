@@ -1,6 +1,6 @@
 
 module.exports = function(req, res, next) {
-  if(!req.session.userId) {
+  if(!req.session || !req.session.userId) {
     return res.forbidden();
   }
   next();
