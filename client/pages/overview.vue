@@ -23,6 +23,10 @@ export default {
   async fetch({ store, params }) {
     await store.dispatch('getRides');
   },
+  transition(to, from) {
+    console.log('transition overview from:', from);
+    return from.name === 'index' ? { name: 'login', mode: 'in-out' } : 'page';
+  },
   computed: {
     ...mapState({
       rides: state => state.rides

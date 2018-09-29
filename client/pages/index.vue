@@ -9,16 +9,50 @@
 </div>
 </template>
 
+<script>
+import LoginForm from '@/components/LoginForm';
+
+export default {
+  head: {
+    title: 'Home'
+  },
+  meta: {
+    public: true
+  },
+  data() {
+    return {
+      backgroundImage: undefined
+    };
+  },
+  mounted() {
+    // charge l'image de fond
+    let tempImg = new Image();
+    tempImg.src = '/images/home.jpg';
+    tempImg.onload = () => {
+      console.log('img loaded', tempImg);
+      this.backgroundImage = tempImg.src;
+    };
+  },
+  components: { LoginForm }
+};
+</script>
+
 <style lang="scss">
 @import '@/assets/styles/_variables.scss';
 
 .home {
-  position: relative;
+  position: absolute;
+  top: #{$navbar-height} + 2*#{$navbar-border};
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 30;
   min-height: calc(100vh - #{$navbar-height} - 2*#{$navbar-border});
   background: #787958;
   background-size: cover;
   background-position-x: 18%;
   background-position-y: 72%;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
 
   .background-placeholder {
     background: #787958;
@@ -61,7 +95,7 @@
         border-radius: 5px;
       }
 
-      
+
     }
 
     @media (min-width: 576px) {
@@ -77,31 +111,3 @@
   }
 }
 </style>
-
-<script>
-import LoginForm from '@/components/LoginForm';
-
-export default {
-  head: {
-    title: 'Home'
-  },
-  meta: {
-    public: true
-  },
-  data() {
-    return {
-      backgroundImage: undefined
-    };
-  },
-  mounted() {
-    // charge l'image de fond
-    let tempImg = new Image();
-    tempImg.src = '/images/home.jpg';
-    tempImg.onload = () => {
-      console.log('img loaded', tempImg);
-      this.backgroundImage = tempImg.src;
-    };
-  },
-  components: { LoginForm }
-};
-</script>

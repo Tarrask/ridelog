@@ -190,19 +190,32 @@ article header {
 .page-leave-active {
   transition: opacity 0.10s;
 }
-.page-enter, .page-leave-active {
+.page-enter, .page-leave-to {
   opacity: 0;
 }
 
 .layout-enter-active, .layout-leave-active {
   transition: opacity 0.15s;
 }
-.layout-enter, .layout-leave-active {
+.layout-enter, .layout-leave-to {
+  transform: translateY(-0px);
+}
+
+.login-enter-active {
+  transition: all 0s;
+}
+.login-leave-active {
+  transition: transform 0.4s ease-in, opacity 0.3s ease-out 0.1s;
+}
+.login-enter, .login-leave-to {
+  transform: translateY(-80%);
   opacity: 0;
 }
+
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.15s;
 }
-.fade-enter, .fade-leave-active {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
