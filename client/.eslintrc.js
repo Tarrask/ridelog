@@ -20,7 +20,11 @@ module.exports = {
   rules: {
     'space-before-function-paren': [ 2, { anonymous: 'always', named: 'never' }],
     'semi': ["error", "always"],
-    'keyword-spacing': [ 2, { "overrides": { "if": { "after": false }, "catch": { "after": false }}}],
+    'keyword-spacing': [ 2, { "overrides": {
+      "if": { "after": false },
+      "catch": { "after": false },
+      "while": { "after": false },
+      "for": { "after": false }}}],
     "brace-style": [ 2, "stroustrup", { "allowSingleLine": true }],
     "space-before-function-paren": ["error", "never"]
   }
