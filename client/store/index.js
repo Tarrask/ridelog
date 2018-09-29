@@ -34,6 +34,7 @@ const initializer = {
       id: undefined,
       brand: undefined,
       name: '',
+      pictures: undefined,
       buyDate: undefined,
       buyPrice: undefined,
       sellDate: undefined,
@@ -49,12 +50,16 @@ const initializer = {
 // ████     █    █   █    █    █████
 export const state = () => {
   return {
+    window: { x: undefined, y: undefined },
     authUser: null,
     rides: [],
     brands: [],
     componentTypes: [],
     articles: [],
     bikes: [],
+    sidebar: {
+      open: false
+    },
     editing: {
       ride: {},
       brand: initializer.brand(),
@@ -74,7 +79,7 @@ export const getters = {
   getField,
   typesByGroup(state) {
     let groups = groupBy(state.componentTypes, t => t.group);
-    for (let key in groups) {
+    for(let key in groups) {
       groups[key].sort((a, b) => a.name.localeCompare(b.name));
     }
     return groups;
@@ -98,6 +103,17 @@ export const getters = {
 // █   █   ███     █    █   █    █    ███   ███   █   █  ████
 export const mutations = {
   updateField,
+  SET_WINDOW_DIMENSIONS(state, dimensions) {
+    state.window = dimensions;
+  },
+
+  OPEN_SIDEBAR(state) {
+    state.sidebar.open = true;
+  },
+  CLOSE_SIDEBAR(state) {
+    state.sidebar.open = false;
+  },
+
   SET_USER(state, user) {
     state.authUser = user;
   },
@@ -309,14 +325,14 @@ export const actions = {
       saved.user = saved.user.id;
       saved.brand = saved.brand.id;
       commit('UPDATE_BIKE', saved);
-      commit('EDIT_BIKE');
+      // commit('EDIT_BIKE');
     }
     else {
       let saved = await this.$axios.$post(`/api/bike?user=${state.authUser.id}`, omit(state.editing.bike, 'id'));
       saved.user = saved.user.id;
       saved.brand = saved.brand.id;
       commit('ADD_BIKE', saved);
-      commit('EDIT_BIKE');
+      // commit('EDIT_BIKE');
     }
   },
   async deleteBike({ commit }, bike) {
@@ -324,11 +340,14 @@ export const actions = {
     commit('DELETE_BIKE', bike);
   },
 
-  async login({ commit, dispatch }, { username, password }) {
+  async login({ commit, state, dispatch }, { username, password }) {
     try {
       const { data: user } = await this.$axios.$post('/api/user/login', { username, password });
       console.log('Login successful:', user);
       commit('SET_USER', user);
+      if(state.window.x > 1080) {
+        commit('OPEN_SIDEBAR');
+      }
 
       await dispatch('initPrivateState');
     }
@@ -342,6 +361,7 @@ export const actions = {
     }
   },
   async logout({ commit }) {
+    commit('CLOSE_SIDEBAR');
     const data = await this.$axios.$get('/api/user/logout');
     console.log('TODO: handle logout return val:', data);
     commit('SET_USER', null);

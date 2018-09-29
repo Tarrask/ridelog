@@ -40,6 +40,9 @@ module.exports.routes = {
   'GET /api/blog/list': { action: 'blog/list' },
   'GET /api/blog/post/:path': { action: 'blog/post', skipAssets: false },
 
+  'POST /api/uploader/image': { action: 'uploader/image' },
+  'GET /api/uploader/get/:fd': { action: 'uploader/get', skipAssets: false },
+
   // prevent unmap responses to api to fall to Nuxt
   '/api/whoami': { response: 'notFound', skipAssets: false }
 

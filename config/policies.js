@@ -21,6 +21,7 @@ module.exports.policies = {
   'user/login': [ 'validate' ],
   'user/logout': [ 'validate' ],
   'blog/*': [ 'validate' ],
+  'uploader/get': [ 'validate' ],
   '*': [ 'isAuthenticated', 'validate' ],
   // '*': true,
 

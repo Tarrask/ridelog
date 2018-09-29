@@ -15,7 +15,7 @@ html {
 input[type=text], input[type=password], input[type=date], input[type=number], textarea, select {
   width: 100%;
   padding: 0.5em;
-  margin: 0 0 1em;
+  margin: 0 0 1.5rem;
   box-sizing: border-box;
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.8);
@@ -67,20 +67,41 @@ input[type=submit], button.btn {
     border-color: rgba(255, 255, 255, 0.2);
     color: white;
   }
+
+  &.btn-pending {
+    cursor: progress;
+  }
+  &.btn-success {
+    background-color: #6ccc29;
+  }
+
+  &.btn-error {
+    background-color: #da3d03;
+  }
+
+  &.btn-cancel {
+    background-color: #4c4d38;
+  }
 }
 
-button.btn.btn-pending {
-  cursor: progress;
-}
-button.btn.btn-success {
-  background-color: #6ccc29;
-}
+.btn-row {
+  display: flex;
+  margin: 0 -0.75rem;
 
-button.btn.btn-error {
-  background-color: #da3d03;
+  .btn {
+    margin: 0 0.75rem;
+  }
 }
 
 
+.fa-icon {
+  width: auto;
+  height: 1em; /* or any other relative font sizes */
+
+  /* You would have to include the following two lines to make this work in Safari */
+  max-width: 100%;
+  max-height: 100%;
+}
 
 
 
@@ -94,7 +115,7 @@ button.btn.btn-error {
   }
 
   @media (min-width: 786px) {
-    border: 2px solid white;
+    border: 1px solid rgba(255,255,255,0.5);
     margin: 2em auto;
     border-radius: 3px;
     box-shadow: 2px 5px 15px rgba(0,0,0,0.3);
@@ -153,6 +174,11 @@ article header {
   font-size: 95%;
   text-align: right;
 }
+
+.img-round {
+  border-radius: 100%;
+}
+
 
 .vdp-datepicker__calendar {
   //margin-top: -1.5em;
