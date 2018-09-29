@@ -39,7 +39,7 @@ export default {
     };
   },
   mounted() {
-    this.files = this.initialFiles.map(f => { return { name: f, state: 'onServer', url: `/api/uploader/get/${f}` }; });
+    this.files = this.initialFiles.map(f => { return { name: f, state: 'onServer', url: `/api/uploader/thumb/100/${f}` }; });
   },
   computed: {
     pendingFiles() {

@@ -42,6 +42,7 @@ module.exports.routes = {
 
   'POST /api/uploader/image': { action: 'uploader/image' },
   'GET /api/uploader/get/:fd': { action: 'uploader/get', skipAssets: false },
+  'GET /api/uploader/thumb/:height/:fd': { action: 'uploader/thumb', skipAssets: false },
 
   // prevent unmap responses to api to fall to Nuxt
   '/api/whoami': { response: 'notFound', skipAssets: false }
