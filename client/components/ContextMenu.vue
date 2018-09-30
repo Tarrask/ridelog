@@ -7,7 +7,7 @@
 </span>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .button {
 }
 .menu {

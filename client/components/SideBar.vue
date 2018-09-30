@@ -4,11 +4,23 @@
       <div class="user" v-if="authUser">
         <v-gravatar class="avatar img-round" :email="authUser.email" :size="120"></v-gravatar>
         <h3>{{ authUser.username }}</h3>
-        <hr>
       </div>
-      <ul>
+      <hr>
+      <ul class="menu">
         <li><nuxt-link to="/bike" @click.native="closeSideBar"><fa-icon name="bicycle" scale="1.5"></fa-icon> Mes vélos</nuxt-link></li>
         <li><nuxt-link to="/ride" @click.native="closeSideBar"><fa-icon name="map" scale="1.5"></fa-icon> Mes sorties</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
+      </ul>
+      <hr>
+      <ul class="footer">
+        <li>
+          <nuxt-link to="/logout" class="logout">Logout <fa-icon name="sign-out-alt"></fa-icon></nuxt-link>
+          <nuxt-link to="/settings" class="settings"><fa-icon name="wrench"></fa-icon></nuxt-link>
+        </li>
       </ul>
     </div>
   </div>
@@ -18,6 +30,9 @@
 import gravatar from 'vue-gravatar';
 import 'vue-awesome/icons/bicycle';
 import 'vue-awesome/icons/map';
+import 'vue-awesome/icons/sign-out-alt';
+import 'vue-awesome/icons/wrench';
+import 'vue-awesome/icons/vial';
 
 export default {
   components: { 'v-gravatar': gravatar },
@@ -57,6 +72,7 @@ export default {
 
   .sidebar-content {
     width: 275px;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -66,6 +82,35 @@ export default {
       flex-direction: column;
       align-items: center;
       width: 100%;
+    }
+
+    .menu {
+      flex-grow: 1;
+      overflow-y: scroll;
+    }
+
+    ul.footer {
+      li {
+        display: flex;
+      }
+      a.logout {
+        flex-grow: 1;
+        text-align: center;
+        color: #d55300;
+        border-right: 1px solid rgba(0,0,0,0.1);
+        font-weight: bold;
+        .fa-icon {
+          color: #d55300;
+          margin: 0;
+        }
+      }
+      a.settings {
+        padding: 0.7em 0.9em;
+        text-align: center;
+        .fa-icon {
+          margin: 0;
+        }
+      }
     }
   }
 
