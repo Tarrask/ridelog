@@ -7,6 +7,7 @@
       </div>
       <hr>
       <ul class="menu">
+        <li><nuxt-link to="/overview" @click.native="closeSideBar"><fa-icon name="home" scale="1.5"></fa-icon> Vue d'ensemble</nuxt-link></li>
         <li><nuxt-link to="/bike" @click.native="closeSideBar"><fa-icon name="bicycle" scale="1.5"></fa-icon> Mes vélos</nuxt-link></li>
         <li><nuxt-link to="/ride" @click.native="closeSideBar"><fa-icon name="map" scale="1.5"></fa-icon> Mes sorties</nuxt-link></li>
         <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
@@ -28,6 +29,7 @@
 
 <script>
 import gravatar from 'vue-gravatar';
+import 'vue-awesome/icons/home';
 import 'vue-awesome/icons/bicycle';
 import 'vue-awesome/icons/map';
 import 'vue-awesome/icons/sign-out-alt';
@@ -86,7 +88,7 @@ export default {
 
     .menu {
       flex-grow: 1;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
 
     ul.footer {
