@@ -25,7 +25,7 @@ export default {
   },
   transition(to, from) {
     console.log('transition overview from:', from);
-    return from.name === 'index' ? { name: 'login', mode: 'in-out' } : 'page';
+    return (from && from.name === 'index') ? { name: 'login', mode: 'in-out' } : 'page';
   },
   computed: {
     ...mapState({
