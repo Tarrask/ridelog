@@ -23,7 +23,6 @@
     "markdown-it-deflist": "^2.0.3",
     "normalize.css": "^8.0.0",
     "nuxt": "^1.4.0",
-    "nuxt-dropzone": "^0.2.7",
     "object-path": "^0.11.4",
     "sails": "^1.0.2",
     "sails-hook-orm": "^2.0.0-16",

@@ -32,13 +32,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-import Dropzone from 'nuxt-dropzone';
 
 import StateButton, * as State from '@/components/StateButton';
 import FileUploader from '@/components/FileUploader';
 
 export default {
-  components: { StateButton, FileUploader, 'dropzone': Dropzone },
+  components: { StateButton, FileUploader },
   data() {
     return {
       state: State.READY,
@@ -92,5 +91,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../node_modules/nuxt-dropzone/dropzone.css';
 </style>
