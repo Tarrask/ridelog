@@ -7,14 +7,14 @@
       </div>
       <hr>
       <ul class="menu">
-        <li><nuxt-link to="/overview" @click.native="closeSideBar"><fa-icon name="home" scale="1.5"></fa-icon> Vue d'ensemble</nuxt-link></li>
-        <li><nuxt-link to="/bike" @click.native="closeSideBar"><fa-icon name="bicycle" scale="1.5"></fa-icon> Mes vélos</nuxt-link></li>
-        <li><nuxt-link to="/ride" @click.native="closeSideBar"><fa-icon name="map" scale="1.5"></fa-icon> Mes sorties</nuxt-link></li>
-        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
-        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
-        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
-        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
-        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial" scale="1.5"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/overview" @click.native="closeSideBar"><fa-icon name="home"></fa-icon> Vue d'ensemble</nuxt-link></li>
+        <li><nuxt-link to="/bike" @click.native="closeSideBar"><fa-icon name="bicycle"></fa-icon> Mes vélos</nuxt-link></li>
+        <li><nuxt-link to="/ride" @click.native="closeSideBar"><fa-icon name="map"></fa-icon> Mes sorties</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
       </ul>
       <hr>
       <ul class="footer">
@@ -156,8 +156,6 @@ export default {
       }
 
       .fa-icon {
-        margin-right: 0.5em;
-        vertical-align: text-bottom;
         color: #4C4D38;
       }
     }

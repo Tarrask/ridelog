@@ -1,6 +1,6 @@
 <template>
   <form method="POST" action="/api/login" @submit.prevent="login">
-    <div class="alert-error" v-if="error">Invalid username or password</div>
+    <!-- <div class="alert-error" v-if="error">Invalid username or password</div> -->
     <input type="text" v-model="username" name="username" placeholder="Your name or email address" @input="resetButton">
     <input type="password" v-model="password" name="password" placeholder="Your secret password" @input="resetButton">
     <state-button :state="state" :disabled="!(username && password)" label="Connection" errorLabel="Echec de la connection"></state-button>

@@ -38,7 +38,7 @@ input[type=text], input[type=password], input[type=date], input[type=number], te
   }
 }
 
-input[type=submit], button.btn {
+input[type=submit], button.btn, a.btn {
   width: 100%;
   padding: 0.5em 0.5em;
   font-size: 1.5em;
@@ -47,6 +47,7 @@ input[type=submit], button.btn {
   background-color: #00a1ff;
   color: white;
   transition: border 0.2s, background-color 0.2s, color 0.2s;
+  text-decoration: none;
 
   &:focus {
     outline: none;
@@ -96,11 +97,16 @@ input[type=submit], button.btn {
 
 .fa-icon {
   width: auto;
-  height: 1em; /* or any other relative font sizes */
+  height: 1.2em; /* or any other relative font sizes */
+  vertical-align: text-bottom;
 
   /* You would have to include the following two lines to make this work in Safari */
   max-width: 100%;
   max-height: 100%;
+}
+
+a .fa-icon {
+  margin-right: 0.5em;
 }
 
 
@@ -212,9 +218,17 @@ article header {
   opacity: 0;
 }
 
+.login-form-enter-active, .login-form-leave-active {
+  transition: all 0.2s;
+}
+.login-form-enter, .login-form-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.15s;
+  transition: all 0.2s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;

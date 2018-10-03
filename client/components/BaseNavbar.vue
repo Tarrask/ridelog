@@ -98,6 +98,17 @@ export default {
     }
   }
 
+  .menu-button {
+    .fa-icon {
+      transform: rotate(0deg);
+      transition: transform 0.5s;
+
+      &.open {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
   .brand {
     font-weight: bold;
   }

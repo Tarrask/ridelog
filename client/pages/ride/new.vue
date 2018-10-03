@@ -4,6 +4,13 @@
   <form method="POST" action="/api/ride" @submit.prevent="postRide">
     <input v-model="ride.title" type="text" placeholder="title" />
     <textarea v-model="ride.description" placeholder="description" />
+    <div>
+      <select style="width: 80%" name="bike" id="bike" v-model="bike" @change="resetButton">
+        <option :value="undefined">&mdash; Faites un choix &mdash;</option>
+        <option v-for="bike in bikes" :value="bike.id" :key="bike.id">{{ bike.name }}</option>
+      </select>
+      <button @click.prevent="newBike">+</button>
+    </div>
     <input v-model="ride.date" type="date" placeholder="Date" />
     <input v-model="ride.reliveLink" type="text" placeholder="relive link" />
     <input v-model="ride.youtubeLink" type="text" placeholder="Youtube vidéo" />
@@ -22,6 +29,7 @@ h2 {
 </style>
 
 <script>
+import { mapState } from 'vuex';
 import FileUploader from '~/components/FileUpload';
 
 export default {
@@ -30,6 +38,7 @@ export default {
       ride: {
         title: undefined,
         description: undefined,
+        bike: undefined,
         date: new Date(),
         reliveLink: undefined,
         youtubeLink: undefined,
@@ -37,6 +46,9 @@ export default {
         gpxFile: undefined
       }
     };
+  },
+  computed: {
+    ...mapState([ 'bikes' ])
   },
   methods: {
     postRide() {

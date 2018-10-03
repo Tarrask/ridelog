@@ -111,7 +111,7 @@ export default {
   box-sizing: border-box;
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.8);
-  font-size: 1.5em;
+  font-size: 1em;
   background-color: rgba(255, 255, 255, 0.75);
   transition: border-color 0.2s, background-color 0.2s;
   resize: vertical;
@@ -141,6 +141,11 @@ export default {
       position: relative;
       z-index: 20;
       margin: 0.5rem;
+      transition: box-shadow 0.1s;
+      box-shadow: 1px 2px 10px rgba(0,0,0,0.3);
+      &:hover {
+        box-shadow: 1px 2px 15px rgba(0,0,0,0.4);
+      }
 
       img {
         display: block;
@@ -163,11 +168,16 @@ export default {
         margin: 0;
         padding: 0;
         cursor: pointer;
-        color: white;
+        color: rgba(255,255,255,0.9);;
         box-shadow: 1px 2px 5px rgba(0,0,0,0.5);
+
+        &:hover {
+          color: white;
+        }
 
         .fa-icon {
           display: block;
+          font-size: 1em;
         }
       }
     }

@@ -3,7 +3,9 @@
   <div class="background-placeholder" :style="{'opacity': backgroundImage ? 0 : 1}"></div>
   <div class="content">
     <div class="login">
-      <login-form></login-form>
+      <transition name="login-form" appear>
+        <login-form v-show="loginVisible" class="login-form"></login-form>
+      </transition>
     </div>
   </div>
 </div>
@@ -21,7 +23,8 @@ export default {
   },
   data() {
     return {
-      backgroundImage: undefined
+      backgroundImage: undefined,
+      loginVisible: false
     };
   },
   mounted() {
@@ -32,6 +35,9 @@ export default {
       console.log('img loaded', tempImg);
       this.backgroundImage = tempImg.src;
     };
+
+    // affiche le Login
+    this.loginVisible = true;
   },
   components: { LoginForm }
 };

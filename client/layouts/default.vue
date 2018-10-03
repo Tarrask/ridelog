@@ -85,18 +85,4 @@
     }
   }
 }
-
-.menu-button {
-  svg {
-    vertical-align: middle;
-    margin-bottom: 10px;
-    transform: rotate(0deg);
-    transition: transform 0.5s;
-
-    &.open {
-      transform: rotate(90deg);
-    }
-  }
-}
-
 </style>
