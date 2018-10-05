@@ -17,7 +17,11 @@ export default {
   },
   methods: {
     onWindowResize: throttle(function() {
-      this.$store.commit('SET_WINDOW_DIMENSIONS', { x: window.innerWidth, y: window.innerHeight });
+      this.$store.commit('SET_WINDOW_DIMENSIONS', {
+        x: window.innerWidth,
+        y: window.innerHeight,
+        orientation: window.innerWidth/window.innerHeight > 1 ? 'l' : 'p'
+      });
       console.log('dimension changed3');
     }, 200)
   }

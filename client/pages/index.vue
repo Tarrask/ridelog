@@ -27,17 +27,49 @@ export default {
       loginVisible: false
     };
   },
+  computed: {
+    imageVersion() {
+      if(this.$store.state.window.orientation === 'l') {
+        if(this.$store.state.window.x > 480) {
+          return '';
+        }
+        else {
+          return '_s';
+        }
+      }
+      else {
+        if(this.$store.state.window.x > 320) {
+          return '_p';
+        }
+        else {
+          return '_ps';
+        }
+      }
+    }
+  },
+  watch: {
+    imageVersion() {
+      this.loadImage();
+    }
+  },
   mounted() {
     // charge l'image de fond
-    let tempImg = new Image();
-    tempImg.src = '/images/home.jpg';
-    tempImg.onload = () => {
-      console.log('img loaded', tempImg);
-      this.backgroundImage = tempImg.src;
-    };
+    this.loadImage();
 
     // affiche le Login
     this.loginVisible = true;
+  },
+  methods: {
+    loadImage() {
+      if(window) {
+        let tempImg = new Image();
+        tempImg.src = `/images/home${this.imageVersion}.jpg`;
+        tempImg.onload = () => {
+          console.log('img loaded', tempImg);
+          this.backgroundImage = tempImg.src;
+        };
+      }
+    }
   },
   components: { LoginForm }
 };
