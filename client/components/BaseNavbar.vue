@@ -102,6 +102,7 @@ export default {
     .fa-icon {
       transform: rotate(0deg);
       transition: transform 0.5s;
+      margin-right: 0;
 
       &.open {
         transform: rotate(90deg);

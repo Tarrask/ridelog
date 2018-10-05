@@ -13,7 +13,7 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     name: { type: 'string', required: true },
-    images: { type: 'json', columnType: 'array' },
+    pictures: { type: 'json', columnType: 'array' },
     buyDate: { type: 'string', columnType: 'Date' },
     sellDate: { type: 'string', columnType: 'Date' },
     buyPrice: { type: 'number' },

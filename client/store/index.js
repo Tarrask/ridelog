@@ -93,6 +93,16 @@ export const getters = {
       ride.index = index;
       return acc;
     }, {});
+  },
+  brandsById(state) {
+    return state.brands.reduce((acc, brand, index) => {
+      acc[brand.id] = brand;
+      brand.index = index;
+      return acc;
+    }, {});
+  },
+  bike: (state) => (id) => {
+    return state.bikes.find(b => id === b.id);
   }
 };
 

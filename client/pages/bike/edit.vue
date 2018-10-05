@@ -3,12 +3,12 @@
     <form @submit.prevent="saveBike">
       <input type="hidden" name="id" id="id" v-model="id">
       <input type="hidden" name="user" id="user" v-model="user">
-      <div>
-        <select style="width: 80%" name="brand" id="brand" v-model="brand" @change="resetButton">
+      <div class="combo">
+        <select name="brand" id="brand" v-model="brand" @change="resetButton">
           <option :value="undefined">&mdash; Faites un choix &mdash;</option>
           <option v-for="brand in brands" :value="brand.id" :key="brand.id">{{ brand.name }}</option>
         </select>
-        <button @click.prevent="newBrand">+</button>
+        <button class="btn" @click.prevent="newBrand">+</button>
       </div>
       <input type="text" name="name" id="name" placeholder="Nom / modèle" v-model="name" @input="resetButton">
       <!-- <dropzone id="foo" ref="el" :options="options" :destroyDropzone="true"></dropzone> -->
