@@ -34,8 +34,8 @@ module.exports.routes = {
   'GET /api/user/logout': { action: 'user/logout', validation: { inputs: 'empty', exits: 'successOut' } },
 
   'GET /api/ride/process-gpx/:id': { action: 'ride/process-gpx' },
-  'POST /api/ride': { action: 'ride/create', validation: { inputs: 'rideForm', exits: 'successOut' } },
-  'GET /api/ride': { action: 'ride/find', parseBlueprintOptions: onlyMine },
+  // 'POST /api/ride': { action: 'ride/create', validation: { inputs: 'rideForm', exits: 'successOut' } },
+  // 'GET /api/ride': { action: 'ride/find', parseBlueprintOptions: onlyMine },
 
   'GET /api/blog/list': { action: 'blog/list' },
   'GET /api/blog/post/:path': { action: 'blog/post', skipAssets: false },

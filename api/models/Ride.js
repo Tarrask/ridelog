@@ -14,9 +14,12 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     title: { type: 'string', required: true },
+    pictures: { type: 'json', columnType: 'array' },
+    bike: { model: 'bike' },
     description: 'string',
     reliveLink: 'string',
     youtubeLink: 'string',
+    date: { type: 'string', columnType: 'Date' },
     odo: 'number',
     gpxFile: { type: 'ref', columnType: 'objectid' },
     user: { model: 'user' },
@@ -34,4 +37,3 @@ module.exports = {
   },
 
 };
-

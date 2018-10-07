@@ -1,10 +1,13 @@
 <template lang="html">
-  <div class="white-page">
-    <nuxt-link to="/ride/new" class="btn float"><fa-icon name="regular/calendar-plus"></fa-icon>Nouvelle sortie</nuxt-link>
-    <h2>Mes sorties</h2>
-    <ul>
-      <li v-for="ride in rides" :key="ride.id">{{ ride.title }}</li>
-    </ul>
+  <div class="card-page">
+    <base-card
+        v-for="ride in rides"
+        :key="ride.id"
+        :image="ride.pictures ? ride.pictures[0] : undefined"
+        @click.native="editRide(ride)"
+        @edit-card="editRide(ride)">
+      {{ ride.title }}
+    </base-card>
   </div>
 </template>
 
@@ -13,13 +16,21 @@ import { mapState } from 'vuex';
 
 import 'vue-awesome/icons/regular/calendar-plus';
 
+import BaseCard from '@/components/BaseCard';
+
 export default {
-  components: {},
+  components: { BaseCard },
   data() {
     return {};
   },
   computed: {
     ...mapState([ 'rides' ])
+  },
+  methods: {
+    editRide(ride) {
+      this.$store.commit('EDIT_RIDE', ride);
+      this.$router.push('/ride/edit');
+    }
   }
 };
 </script>

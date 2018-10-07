@@ -5,7 +5,7 @@
         v-for="bike in bikes"
         :key="bike.id"
         :image="bike.pictures[0]"
-        @click.native="details(bike)"
+        @click.native="editBike(bike)"
         @edit-card="editBike(bike)">
       <h3 class="brand">{{ brandsById[bike.brand].name }}</h3>
       <h2>{{ bike.name }}</h2>
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     details(bike) {
-      this.$router.push(`/bike/details/${bike.id}`);
+      this.$router.push(`/bike/view/${bike.id}`);
     },
     editBike(bike) {
       this.$store.commit('EDIT_BIKE', bike);

@@ -15,11 +15,7 @@ module.exports = {
     username: { type: 'string', required: true },
     email: { type: 'string', required: true },
     passwordHash: { type: 'string', required: true },
-    role: { type: 'string', required: true, isIn: ['user', 'admin'] },
-    rides: {
-      collection: 'ride',
-      via: 'user'
-    }
+    role: { type: 'string', required: true, isIn: ['user', 'admin'] }
 
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

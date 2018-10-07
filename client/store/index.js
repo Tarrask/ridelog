@@ -40,6 +40,20 @@ const initializer = {
       sellDate: undefined,
       sellPrice: undefined
     };
+  },
+  ride() {
+    return {
+      id: undefined,
+      title: '',
+      pictures: undefined,
+      bike: null,
+      description: null,
+      reliveLink: null,
+      youtubeLink: null,
+      odo: null,
+      date: null,
+      gpxFile: null
+    };
   }
 };
 
@@ -61,11 +75,11 @@ export const state = () => {
       open: false
     },
     editing: {
-      ride: {},
       brand: initializer.brand(),
       componentType: initializer.componentType(),
       article: initializer.article(),
-      bike: initializer.bike()
+      bike: initializer.bike(),
+      ride: initializer.ride(),
     }
   };
 };
@@ -128,18 +142,15 @@ export const mutations = {
     state.authUser = user;
   },
 
-  SET_RIDE(state, newRide) {
-    const index = findIndex(state.rides, ride => ride.id === newRide.id);
-    if(index === -1) {
-      state.rides.push(newRide);
-    }
-    else {
-      state.rides[index] = newRide;
-    }
-  },
-  SET_RIDES(state, rides) {
-    state.rides = rides;
-  },
+  // SET_RIDE(state, newRide) {
+  //   const index = findIndex(state.rides, ride => ride.id === newRide.id);
+  //   if(index === -1) {
+  //     state.rides.push(newRide);
+  //   }
+  //   else {
+  //     state.rides[index] = newRide;
+  //   }
+  // },
 
   // ================================== Brands =================================
   SET_BRANDS(state, brands) {
@@ -241,6 +252,30 @@ export const mutations = {
     state.editing.bike = bike ? Object.assign({}, bike) : initializer.bike();
   },
 
+  // ================================ Bikes ====================================
+  SET_RIDES(state, rides) {
+    state.rides = rides;
+  },
+  ADD_RIDE(state, ride) {
+    state.rides.push(ride);
+  },
+  UPDATE_RIDE(state, ride) {
+    let index = findIndex(state.rides, r => r.id === ride.id);
+    if(index === -1) {
+      throw new Error('rideNotFound');
+    }
+    Vue.set(state.rides, index, ride);
+  },
+  DELETE_RIDE(state, ride) {
+    let index = findIndex(state.rides, r => r.id === ride.id);
+    if(index === -1) {
+      throw new Error('rideNotFound');
+    }
+    state.rides.splice(index, 1);
+  },
+  EDIT_RIDE(state, ride) {
+    state.editing.ride = ride ? Object.assign({}, ride) : initializer.ride();
+  }
 };
 
 //  ███    ████  █████  ███   ███   █   █   ████
@@ -272,6 +307,7 @@ export const actions = {
     commit('SET_COMPONENT_TYPES', await this.$axios.$get('/api/componentType'));
     commit('SET_ARTICLES', await this.$axios.$get('/api/article?populate=false'));
     commit('SET_BIKES', await this.$axios.$get('/api/bike?populate=false'));
+    commit('SET_RIDES', await this.$axios.$get('/api/ride?populate=false'));
   },
 
   async saveBrand({ state, commit }) {
@@ -345,6 +381,21 @@ export const actions = {
       // commit('EDIT_BIKE');
     }
   },
+  async saveRide({ state, commit }) {
+    let ride = state.editing.ride;
+    if(ride.id) {
+      let saved = await this.$axios.$patch(`/api/ride/${ride.id}?user=${state.authUser.id}`, omit(ride, 'user'));
+      saved.user = saved.user.id;
+      saved.bike = saved.bike ? saved.bike.id : null;
+      commit('UPDATE_RIDE', saved);
+    }
+    else {
+      let saved = await this.$axios.$post(`/api/ride?user=${state.authUser.id}`, omit(ride, 'id'));
+      saved.user = saved.user.id;
+      saved.bike = saved.bike ? saved.bike.id : null;
+      commit('ADD_RIDE', saved);
+    }
+  },
   async deleteBike({ commit }, bike) {
     await this.$axios.$delete(`/api/bike/${bike.id}`);
     commit('DELETE_BIKE', bike);
@@ -376,37 +427,37 @@ export const actions = {
     console.log('TODO: handle logout return val:', data);
     commit('SET_USER', null);
   },
-  async createRide({ commit }, ride) {
-    try {
-      let formData = new FormData();
-      formData.append('title', ride.title);
-      ride.description && formData.append('description', ride.description);
-      formData.append('reliveLink', ride.reliveLink);
-      formData.append('youtubeLink', ride.youtubeLink);
-      ride.odo && formData.append('odo', ride.odo);
-      if(ride.gpxFile) { formData.append('gpxFile', ride.gpxFile); }
-
-      const { data } = await this.$axios.$post('/api/ride', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      console.log('Ride commited:', data);
-    }
-    catch(err) {
-      throw err;
-    }
-  },
-  async getRide({ commit, getters }, id) {
-    const ride = await this.$axios.$get(`/api/ride/${id}?populate=false`);
-    commit('SET_RIDE', ride);
-  },
-  async getRides({ commit }) {
-    const rides = await this.$axios.$get('/api/ride?populate=false');
-    commit('SET_RIDES', rides);
-  },
-  async saveRide({ commit }, ride) {
-    const savedRide = await this.$axios.$patch(`/api/ride/${ride.id}?populate=false`, ride);
-    commit('SET_RIDE', savedRide);
-  }
+  // async createRide({ commit }, ride) {
+  //   try {
+  //     let formData = new FormData();
+  //     formData.append('title', ride.title);
+  //     ride.description && formData.append('description', ride.description);
+  //     formData.append('reliveLink', ride.reliveLink);
+  //     formData.append('youtubeLink', ride.youtubeLink);
+  //     ride.odo && formData.append('odo', ride.odo);
+  //     if(ride.gpxFile) { formData.append('gpxFile', ride.gpxFile); }
+  //
+  //     const { data } = await this.$axios.$post('/api/ride', formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     });
+  //     console.log('Ride commited:', data);
+  //   }
+  //   catch(err) {
+  //     throw err;
+  //   }
+  // },
+  // async getRide({ commit, getters }, id) {
+  //   const ride = await this.$axios.$get(`/api/ride/${id}?populate=false`);
+  //   commit('SET_RIDE', ride);
+  // },
+  // async getRides({ commit }) {
+  //   const rides = await this.$axios.$get('/api/ride?populate=false');
+  //   commit('SET_RIDES', rides);
+  // },
+  // async saveRide({ commit }, ride) {
+  //   const savedRide = await this.$axios.$patch(`/api/ride/${ride.id}?populate=false`, ride);
+  //   commit('SET_RIDE', savedRide);
+  // }
 };
