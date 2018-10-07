@@ -23,6 +23,7 @@
 
   "parserOptions": {
     "ecmaVersion": 8,
+    "sourceType": "module",
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
     }
@@ -45,7 +46,7 @@
     "camelcase":                    ["warn", {"properties":"always"}],
     "comma-style":                  ["warn", "last"],
     "curly":                        ["error"],
-    "eqeqeq":                       ["error", "always"],
+    "eqeqeq":                       ["error", "smart"],
     "eol-last":                     ["warn"],
     "handle-callback-err":          ["error"],
     "indent":                       ["warn", 2, {
