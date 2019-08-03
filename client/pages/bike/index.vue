@@ -5,7 +5,7 @@
         v-for="bike in bikes"
         :key="bike.id"
         :image="bike.pictures[0]"
-        @click.native="editBike(bike)"
+        @click.native="viewBike(bike)"
         @edit-card="editBike(bike)">
       <h3 class="brand">{{ brandsById[bike.brand].name }}</h3>
       <h2>{{ bike.name }}</h2>
@@ -37,19 +37,23 @@ export default {
     };
   },
   computed: {
-    ...mapState(['bikes']),
-    ...mapGetters(['brandsById'])
+    bikes() {
+      return this.$store.getters.records('bike');
+    },
+    brandsById() {
+      return this.$store.getters.recordsById('brand');
+    }
   },
   methods: {
-    details(bike) {
+    viewBike(bike) {
       this.$router.push(`/bike/view/${bike.id}`);
     },
     editBike(bike) {
-      this.$store.commit('EDIT_BIKE', bike);
+      this.$store.commit('EDIT_RECORD', { type: 'bike', record: bike});
       this.$router.push('/bike/edit');
     },
     newBike() {
-      this.$store.commit('EDIT_BIKE');
+      this.$store.commit('NEW_RECORD', { type: 'bike' });
       this.$router.push('/bike/edit');
     },
     async deleteBike(bike) {

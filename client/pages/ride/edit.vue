@@ -3,7 +3,7 @@
     <form @submit.prevent="saveRide">
       <input type="hidden" name="id" id="id" v-model="id">
       <input type="hidden" name="user" id="user" v-model="user">
-      <input type="text" name="title" id="title" placeholder="Titre" v-model="title" @input="resetButton">
+      <input type="text" name="name" id="name" placeholder="Titre" v-model="name" @input="resetButton">
       <textarea placeholder="Description"></textarea>
       <file-uploader @uploaded-files="updateFilesList" :initial-files="pictures"></file-uploader>
       <div class="combo">
@@ -47,7 +47,7 @@ export default {
     ...mapFields([
       'editing.ride.id',
       'editing.ride.user',
-      'editing.ride.title',
+      'editing.ride.name',
       'editing.ride.pictures',
       'editing.ride.bike',
       'editing.ride.description',
@@ -57,15 +57,15 @@ export default {
       'editing.ride.date',
       'editing.ride.gpxFile'
     ]),
-    ...mapState([
-      'bikes'
-    ]),
+    ...mapState({
+      bikes: state => state.model.bike
+    }),
   },
   methods: {
     async saveRide() {
       try {
         this.state = State.PENDING;
-        await this.$store.dispatch('saveRide');
+        await this.$store.dispatch('saveRecord', 'ride');
         this.state = State.SUCCESS;
         setTimeout(() => {
           this.$router.go(-1);
@@ -83,7 +83,7 @@ export default {
       this.pictures = files.map(f => f.name);
     },
     newBike() {
-      this.$store.commit('EDIT_BIKE');
+      this.$store.commit('NEW_RECORD', { type: 'bike' });
       this.$router.push('/bike/edit');
     }
   }

@@ -6,7 +6,7 @@
         :image="ride.pictures ? ride.pictures[0] : undefined"
         @click.native="editRide(ride)"
         @edit-card="editRide(ride)">
-      {{ ride.title }}
+      {{ ride.name }}
     </base-card>
   </div>
 </template>
@@ -24,11 +24,11 @@ export default {
     return {};
   },
   computed: {
-    ...mapState([ 'rides' ])
+    ...mapState({ rides: state => state.model.ride })
   },
   methods: {
     editRide(ride) {
-      this.$store.commit('EDIT_RIDE', ride);
+      this.$store.commit('EDIT_RECORD', { type: 'ride', record: ride });
       this.$router.push('/ride/edit');
     }
   }

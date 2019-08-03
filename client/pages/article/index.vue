@@ -56,11 +56,11 @@ export default {
       'editing.article.type',
       'editing.article.brand'
     ]),
-    ...mapState([
-      'articles',
-      'componentTypes',
-      'brands'
-    ]),
+    ...mapState({
+      articles: state => state.model.article,
+      componentTypes: state => state.model.componentType,
+      brands: state => state.model.brand
+    }),
     ...mapGetters([
       'typesByGroup',
       'sortedGroups'
@@ -69,16 +69,16 @@ export default {
   methods: {
     editArticle(article) {
       this.resetButton();
-      this.$store.commit('EDIT_ARTICLE', article);
+      this.$store.commit('EDIT_RECORD', { type: 'article', record: article });
     },
     newArticle() {
       this.resetButton();
-      this.$store.commit('EDIT_ARTICLE');
+      this.$store.commit('NEW_RECORD', { type: 'article' });
     },
     async saveArticle() {
       try {
         this.state = State.PENDING;
-        await this.$store.dispatch('saveArticle');
+        await this.$store.dispatch('saveRecord', 'article');
         this.state = State.SUCCESS;
       }
       catch(err) {
@@ -87,7 +87,7 @@ export default {
       }
     },
     async deleteArticle(article) {
-      this.$store.dispatch('deleteArticle', article);
+      this.$store.dispatch('deleteRecord', { type: 'article', record: article });
     },
     resetButton() {
       this.state = State.READY;

@@ -52,23 +52,23 @@ export default {
       'editing.brand.name',
       'editing.brand.website'
     ]),
-    ...mapState([
-      'brands'
-    ])
+    ...mapState({
+      brands: state => state.model.brand
+    })
   },
   methods: {
     editBrand(brand) {
       this.resetButton();
-      this.$store.commit('EDIT_BRAND', brand);
+      this.$store.commit('EDIT_RECORD', { type: 'brand', record: brand });
     },
     newBrand() {
       this.resetButton();
-      this.$store.commit('EDIT_BRAND');
+      this.$store.commit('NEW_RECORD', { type: 'brand' });
     },
     async saveBrand() {
       try {
         this.state = State.PENDING;
-        await this.$store.dispatch('saveBrand');
+        await this.$store.dispatch('saveRecord', 'brand');
         this.state = State.SUCCESS;
       }
       catch(err) {
@@ -77,7 +77,7 @@ export default {
       }
     },
     async deleteBrand(brand) {
-      await this.$store.dispatch('deleteBrand', brand);
+      await this.$store.dispatch('deleteRecord', { type: 'brand', record: brand });
     },
     resetButton() {
       this.state = State.READY;

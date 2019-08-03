@@ -53,9 +53,9 @@ export default {
       'editing.componentType.name',
       'editing.componentType.group'
     ]),
-    ...mapState([
-      'types'
-    ]),
+    ...mapState({
+      types: state => state.model.componentType
+    }),
     ...mapGetters([
       'typesByGroup',
       'sortedGroups'
@@ -64,16 +64,16 @@ export default {
   methods: {
     editType(type) {
       this.resetButton();
-      this.$store.commit('EDIT_COMPONENT_TYPE', type);
+      this.$store.commit('EDIT_RECORD', { type: 'componentType', record: type });
     },
     newType() {
       this.resetButton();
-      this.$store.commit('EDIT_COMPONENT_TYPE');
+      this.$store.commit('NEW_RECORD', { type: 'componentType' });
     },
     async saveType() {
       try {
         this.state = State.PENDING;
-        await this.$store.dispatch('saveComponentType');
+        await this.$store.dispatch('saveRecord', 'componentType');
         this.state = State.SUCCESS;
       }
       catch(err) {
@@ -82,7 +82,7 @@ export default {
       }
     },
     async deleteType(type) {
-      this.$store.dispatch('deleteComponentType', type);
+      this.$store.dispatch('deleteRecord', { type: 'componentType', record: type });
     },
     resetButton() {
       this.state = State.READY;

@@ -58,15 +58,13 @@ export default {
       'editing.bike.sellDate',
       'editing.bike.sellPrice'
     ]),
-    ...mapState([
-      'brands'
-    ]),
+    ...mapState({ brands: state => state.model.brand })
   },
   methods: {
     async saveBike() {
       try {
         this.state = State.PENDING;
-        await this.$store.dispatch('saveBike');
+        await this.$store.dispatch('saveRecord', 'bike');
         this.state = State.SUCCESS;
         setTimeout(() => {
           this.$router.go(-1);

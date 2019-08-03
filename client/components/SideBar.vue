@@ -10,7 +10,7 @@
         <li><nuxt-link to="/overview" @click.native="closeSideBar"><fa-icon name="home"></fa-icon> Vue d'ensemble</nuxt-link></li>
         <li><nuxt-link to="/bike" @click.native="closeSideBar"><fa-icon name="bicycle"></fa-icon> Mes vélos</nuxt-link></li>
         <li><nuxt-link to="/ride" @click.native="closeSideBar"><fa-icon name="map"></fa-icon> Mes sorties</nuxt-link></li>
-        <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
+        <li><nuxt-link to="/servicing" @click.native="closeSideBar"><fa-icon name="oil-can"></fa-icon> Mes maintenances</nuxt-link></li>
         <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
         <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
         <li><nuxt-link to="/test" @click.native="closeSideBar"><fa-icon name="vial"></fa-icon> Test</nuxt-link></li>
@@ -35,6 +35,7 @@ import 'vue-awesome/icons/map';
 import 'vue-awesome/icons/sign-out-alt';
 import 'vue-awesome/icons/wrench';
 import 'vue-awesome/icons/vial';
+import 'vue-awesome/icons/oil-can';
 
 export default {
   components: { 'v-gravatar': gravatar },
